@@ -1,0 +1,44 @@
+name: Ruff & Docformat
+
+# CINTENT >> MANUAL TRIGGER
+# on: [push, pull_request]
+on: [repository_dispatch, workflow_dispatch]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # CINTENT >> REMOVE_MATRIX
+        # check: ["ruff", "docformatter"]
+        check: ["ruff"]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    # CINTENT >> INSERT_CINTENT
+    - uses: JavidDitty/setup-cintent@a606c80c34ec190c6a20dea33d6d58ddb6c4e0cc
+
+    - uses: actions/setup-python@v4
+      with:
+          python-version: '3.11'
+
+    - name: Install tools
+      run: pip install "ruff==0.2.2" "docformatter[tomli]==1.5.0"
+
+    - name: Ruff (Flake8)
+      if: matrix.check == 'ruff'
+      working-directory: src/
+      run: ruff check .
+
+    - name: Docformatter
+      if: matrix.check == 'docformatter'
+      run: docformatter --check -r src/
+
+    # CINTENT >> INSERT_CINTENT
+    - name: Upload CIntent Artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: ${{ env.CINTENT_ARTIFACT_NAME }}
+        path: ${{ env.CINTENT_LOGS }}
