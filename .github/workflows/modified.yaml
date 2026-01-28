@@ -16,12 +16,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    # CINTENT >> INSERT_CINTENT
-    - uses: JavidDitty/setup-cintent@a606c80c34ec190c6a20dea33d6d58ddb6c4e0cc
-
     - uses: actions/setup-python@v4
       with:
           python-version: '3.11'
+
+    # CINTENT >> INSERT_CINTENT
+    - uses: JavidDitty/setup-cintent@3e5b2faf83a2ad32c22a1cd0f86f5f20ea53a5ab
 
     - name: Install tools
       run: pip install "ruff==0.2.2" "docformatter[tomli]==1.5.0"
